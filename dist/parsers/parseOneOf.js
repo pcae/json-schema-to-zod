@@ -1,12 +1,10 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import { parseSchema, ParseSchemaContext } from "./parseSchema";
-
-export const parseOneOf = (
-  schema: JSONSchema7 & { oneOf: JSONSchema7Definition[] },
-  ctx: ParseSchemaContext
-) => {
-  return `z.any().superRefine((x, ctx) => {
-    const schemas = [${schema.oneOf.map((item) => parseSchema(item, ctx))}];
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseOneOf = void 0;
+const parseSchema_1 = require("./parseSchema");
+const parseOneOf = (schema, ctx) => {
+    return `z.any().superRefine((x, ctx) => {
+    const schemas = [${schema.oneOf.map((item) => (0, parseSchema_1.parseSchema)(item, ctx))}];
     const errors = schemas.reduce(
       (errors: z.ZodError[], schema) =>
         ((result) => ("error" in result ? [...errors, result.error] : errors))(
@@ -24,3 +22,4 @@ export const parseOneOf = (
     }
   })`;
 };
+exports.parseOneOf = parseOneOf;
